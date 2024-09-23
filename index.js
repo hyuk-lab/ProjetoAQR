@@ -61,47 +61,46 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  *                   type: string
  */
 
-
-// pegando a variarel app e setando um get nela para definir os parametros para desenvolver a API.
-app.get('/imc', (req, res, next) => {
+app.get('/aqr', (req, res, next) => {
     try {
-        const { peso, altura} = req.query;
+        //Definindo as variaveis para fazer a conta
+        const {area1, area2,area3,area4} = req.query;
 
 
-        // definindo erro se nenhum parametro for informado no React.
-        if (peso === undefined || altura === undefined ) {
+      
+        if (area1 === undefined || area2 === undefined ||area3 === undefined ||area4 === undefined ) {
             throw new Error('Parâmetros insuficientes!');
         }
 
-        // definindo que pesoNumber e alturaNumber são numeros reais e serão utilizados em calculos.
-        const pesoNumber = parseFloat(peso);
-        const alturaNumber = parseFloat(altura);
+        const areaNumber1 = parseFloat(area1);
+        const areaNumber2 = parseFloat(area2);
+        const areaNumber3 = parseFloat(area3);
+        const areaNumber4 = parseFloat(area4);
 
-       //Se o valor não ser um numero será retonado "Parametros inválidos".
-        if (isNaN(pesoNumber) || isNaN(alturaNumber)) {
+        let result;
+        let quadrado;
+        let retangulo;
+
+        quadrado = (areaNumber1 + areaNumber2 + areaNumber3 + areaNumber4)/2 ;
+
+        retangulo = (areaNumber1 * areaNumber2) && (areaNumber3 * areaNumber4);
+        
+
+
+        if (isNaN(areaNumber1) || isNaN(areaNumber2) || isNaN(areaNumber3) || isNaN(areaNumber4)) {
             throw new Error('Parâmetros inválidos!');
         }
 
-        //Definindo a variavel imc como imutavel, pois trata-se de uma operação matematica.
-        const imc = peso / (altura * altura);
+         if (areaNumber1 === areaNumber2 && areaNumber2 === areaNumber3 && areaNumber3 === areaNumber4){
+                result = `${quadrado}m²  -  quadrado`
+         } else if (areaNumber1 === areaNumber3 && areaNumber2 === areaNumber4 ){
+                result = `${retangulo}m²  -  retangulo`
+         } else {
+            result = `não é um quadrado e nem um retangulo`
+         }
 
-        //Definindo uma variavel para receber os resultados da conta imc
-        let result1;
-         
 
-        //Passando if para analisar o resultado e retornar uma mensagem caso o imc dê determinados resultados. 
-        if (imc < 18.5) {
-            result1 = `${imc} - Abaixo do peso`;
-        } else if (imc >= 18.5 && imc < 24.9) {
-            result1 = `${imc} - Peso normal`;
-        } else if (imc >= 25 && imc < 29.9) {
-            result1 = `${imc} - Sobrepeso`;
-        } else { 
-            result1 = `${imc} - Obesidade`;
-        }
-
-        //Passando res.json para devolver o resultado tanto do calculco imc quanto do if no navegador ou na propria aplicação.
-        res.json({result1});
+        res.json({result});
     } catch (error) {
         next(error); 
     }
@@ -115,5 +114,4 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`API rodando em http://localhost:${port}`);
 });
-
 

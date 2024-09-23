@@ -3,25 +3,28 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'rea
 
 //passando a função e variaves.
 export default function App() {
-  const [peso, setPeso] = useState('');
-  const [altura, setAltura] = useState('');
-  const [result1, setResult1] = useState(null);
+  const [area1, setArea1] = useState('');
+  const [area2, setArea2] = useState('');
+  const [area3, setArea3] = useState('');
+  const [area4, setArea4] = useState('');
+  const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
   //definindo variavel para o usuario selecionar.
-  const handleCalculateImc = async () => {
+  const handleCalculateAQR = async () => {
     try {
       setError(null); // Reset error
       const response = await fetch(
-        `http://26.215.35.92:3000/imc?peso=${peso}&altura=${altura}`
+        `http://26.215.35.92:3000/aqr?area1=${area1}&area2=${area2}&area3=${area3}&area4=${area4}`
       );
+
       const data = await response.json();
 
       if (response.ok) {
-        setResult1(data.result1);
+        setResult(data.result);
       } else {
         setError(data.error);
-        setResult1(null);
+        setResult(null);
       }
     } catch (err) {
       setError('Erro de rede ou servidor!');
@@ -29,49 +32,50 @@ export default function App() {
     }
   };
 
-  /*const getButtonStyle = (op) => {
-    return operation === op ? styles.selectedButton : styles.button;
-  };*/
-
-
   return (
-    //Passando a estilização.
-
-    //Textinput: definindo caixa de texto e passando as variaves da função app.
-
-    //Button: definindo botão para passar a função handleCalculateIMC para o usuario selecionar e prosseguir com o calculo do IMC.
-
-    //Resultado: passando a variavel result1 para mostrar o resultado do calculo IMC feito pela API.
-
-    //Const style: Passando a estilização de como é visto no mobile.
     <View style={styles.container}>
-      <Text style={styles.title}>IMC</Text>
+      <Text style={styles.title}>Área de Quadrado e Retângulo</Text>
 
       <TextInput
         style={styles.input}
         keyboardType="numeric"
-        placeholder="Peso"
-        value={peso}
-        onChangeText={setPeso}
+        placeholder="Altura 1"
+        value={area1}
+        onChangeText={setArea1}
       />
+
       <TextInput
         style={styles.input}
         keyboardType="numeric"
-        placeholder="Altura"
-        value={altura}
-        onChangeText={setAltura}
+        placeholder="Largura 1"
+        value={area2}
+        onChangeText={setArea2}
       />
 
-      <Button title="Calcular" onPress={handleCalculateImc} />
+        <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Altura 2"
+        value={area3}
+        onChangeText={setArea3}
+        /> 
 
-      {result1 !== null && <Text style={styles.result}>Resultado: {result1}</Text>}
+        <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Largura 2"
+        value={area4}
+        onChangeText={setArea4}
+      />
+
+
+      <Button title="Calcular" onPress={handleCalculateAQR} />
+
+      {result !== null && <Text style={styles.result}>Resultado: {result}</Text>}
       {error && <Text style={styles.error}>Erro: {error}</Text>}
     </View>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
