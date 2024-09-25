@@ -1,5 +1,4 @@
 # aula20240819API
-# aula20240819API
 
 Configurando o React:
 
